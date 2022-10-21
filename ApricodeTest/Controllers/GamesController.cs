@@ -1,5 +1,6 @@
 ﻿using ApricodeTest._Data;
 using ApricodeTest.Models;
+using ApricodeTest.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +12,10 @@ public class GamesController : Controller
 {
     private readonly IGameRepository _gameRepository;
 
-    public GamesController(IGameRepository gameRepository)=>_gameRepository = gameRepository;
+    public GamesController(IGameRepository gameRepository)
+    {
+        _gameRepository = gameRepository;
+    }
     
     [HttpGet]
     public IActionResult GetAllGames()
@@ -20,19 +24,26 @@ public class GamesController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddNewGame(Game game)
+    public async Task<IActionResult> AddNewGame(GameViewModel gameViewModel)
     {
-        var result = await _gameRepository.AddNewGame(game);
-        if (result.Id == 0) {
+        if(ModelState.IsValid)
+        {
+            await _gameRepository.AddNewGame(gameViewModel);
+        }
+        else
+        {
             return StatusCode(StatusCodes.Status500InternalServerError, "Что-то пошло не так");
         }
         return Ok("Игра добавилась успешно!");
     }
 
     [HttpPut]
-    public async Task<IActionResult> UpdateGame(Game game)
+    public async Task<IActionResult> UpdateGame(GameViewModel gameViewModel)
     {
-        await _gameRepository.UpdateGame(game);
+        if (ModelState.IsValid)
+        {
+            await _gameRepository.UpdateGame(gameViewModel);
+        }
         return Ok("Игра обновлена");
     }
 
@@ -44,8 +55,8 @@ public class GamesController : Controller
     }
 
     [HttpGet("{genre}")]
-    public IActionResult GetGameByGenre(int id)
+    public IActionResult GetGameByGenre(string genre)
     {
-        return Ok(_gameRepository.GetGamesByGenre(id));
+        return Ok(_gameRepository.GetGamesByGenre(genre));
     }
 }

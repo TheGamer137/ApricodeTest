@@ -1,4 +1,6 @@
 using ApricodeTest._Data;
+using ApricodeTest.Data;
+using ApricodeTest.Data.RepositoryClasses;
 using Newtonsoft.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +12,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSqlServer<AppDbContext>(builder.Configuration.GetConnectionString("SqlServerConnection"));
 builder.Services.AddScoped <IGameRepository, GameRepository> ();
+
 //Enable CORS
 builder.Services.AddCors(c => {
     c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());

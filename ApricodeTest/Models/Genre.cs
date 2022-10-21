@@ -9,4 +9,5 @@ public class Genre
     public int GenreId { get; set; }
     [DisplayName("Жанр игры")]
     public string GenreName { get; set; }
+    public ICollection<GameGenre> GameGenres { get; set; }
 }

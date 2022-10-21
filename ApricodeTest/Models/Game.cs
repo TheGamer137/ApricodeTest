@@ -15,5 +15,5 @@ public class Game
     public DeveloperStudio DeveloperStudio { get; set; }
     [Required]
     [DisplayName("Жанры игры")]
-    public HashSet<Genre> Genre { get; set; }
+    public ICollection<GameGenre> GameGenres { get; set; }
 }
